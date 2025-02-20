@@ -5,14 +5,21 @@
 // Use Express library
 
 import express, { Request, Response } from 'express';
-const app = express();
 
+const app = express();
 app.use(express.json());
 
 const users: { name: string }[] = [];
 
-app.post('/user', (req: Request, res: Response) => {
-    res.status(200).send();
+app.post('/user', (req: Request, res: Response):any => {
+    const { name } = req.body;
+
+    if (!name) {
+        return res.status(400).json({ message: "Name is required" });
+    }
+
+    users.push({ name });
+    res.status(201).json({ message: "User added", user: { name } });
 });
 
 app.get('/users', (req: Request, res: Response) => {
